@@ -6,16 +6,16 @@ const (
 
 // ArticleModel is a model for entity.Article
 type Watched struct {
-	id       *Detailed `gorm:"foreignKey:id" json:"id"`
-	season   int       `gorm:"type:int;not_null" json:"season"`
-	episodes int       `gorm:"type:int;not_null" json:"episodes"`
+	Id       *Detailed `gorm:"foreignKey:id" json:"id"`
+	Season   int       `gorm:"type:int;not_null" json:"season"`
+	Episodes int       `gorm:"type:int;not_null" json:"episodes"`
 }
 
 func NewWatched(id *Detailed, season, episodes int) *Watched {
 	return &Watched{
-		id:       id,
-		season:   season,
-		episodes: episodes,
+		Id:       id,
+		Season:   season,
+		Episodes: episodes,
 	}
 }
 

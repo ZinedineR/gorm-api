@@ -6,14 +6,14 @@ const (
 
 // ArticleModel is a model for entity.Article
 type Streamed struct {
-	id       *TV    `gorm:"foreignKey:id" json:"id"`
-	platform string `gorm:"type:varchar;not_null" json:"platform"`
+	Id       *TV    `gorm:"foreignKey:id" json:"id"`
+	Platform string `gorm:"type:varchar;not_null" json:"platform"`
 }
 
 func NewStreamed(id *TV, platform string) *Streamed {
 	return &Streamed{
-		id:       id,
-		platform: platform,
+		Id:       id,
+		Platform: platform,
 	}
 }
 

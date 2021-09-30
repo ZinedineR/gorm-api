@@ -10,16 +10,16 @@ const (
 
 // ArticleModel is a model for entity.Article
 type TV struct {
-	id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
-	title    string    `gorm:"type:varchar;not_null" json:"title"`
-	producer string    `gorm:"type:varchar;null" json:"producer"`
+	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	Title    string    `gorm:"type:varchar;not_null" json:"title"`
+	Producer string    `gorm:"type:varchar;null" json:"producer"`
 }
 
 func NewTV(id uuid.UUID, title, producer string) *TV {
 	return &TV{
-		id:       id,
-		title:    title,
-		producer: producer,
+		Id:       id,
+		Title:    title,
+		Producer: producer,
 	}
 }
 

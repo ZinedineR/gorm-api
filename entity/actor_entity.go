@@ -6,14 +6,14 @@ const (
 
 // ArticleModel is a model for entity.Article
 type Actor struct {
-	id   *TV    `gorm:"foreignKey:id" json:"id"`
-	name string `gorm:"type:varchar;not_null" json:"name"`
+	Id   *TV    `gorm:"foreignKey:id" json:"id"`
+	Name string `gorm:"type:varchar;not_null" json:"name"`
 }
 
 func NewActor(id *TV, name string) *Actor {
 	return &Actor{
-		id:   id,
-		name: name,
+		Id:   id,
+		Name: name,
 	}
 }
 

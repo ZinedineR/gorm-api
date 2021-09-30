@@ -7,9 +7,6 @@ import (
 	"os"
 	"sort"
 
-	// "codelabs-service/entity"
-	// "codelabs-service/internal/config"
-
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"gorm.io/driver/postgres"

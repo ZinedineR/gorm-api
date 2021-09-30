@@ -6,18 +6,18 @@ const (
 
 // ArticleModel is a model for entity.Article
 type Detailed struct {
-	id       *TV `gorm:"foreignKey:id" json:"id"`
-	season   int `gorm:"type:int;not_null" json:"season"`
-	episodes int `gorm:"type:int;not_null" json:"episodes"`
-	year     int `gorm:"type:int;not_null" json:"year"`
+	Id       *TV `gorm:"foreignKey:id" json:"id"`
+	Season   int `gorm:"type:int;not_null" json:"season"`
+	Episodes int `gorm:"type:int;not_null" json:"episodes"`
+	Year     int `gorm:"type:int;not_null" json:"year"`
 }
 
 func NewDetailed(id *TV, season, episodes, year int) *Detailed {
 	return &Detailed{
-		id:       id,
-		season:   season,
-		episodes: episodes,
-		year:     year,
+		Id:       id,
+		Season:   season,
+		Episodes: episodes,
+		Year:     year,
 	}
 }
 
