@@ -1,16 +1,19 @@
 package entity
 
+import "gorm.io/gorm"
+
 const (
 	StreamedTableName = "streamed"
 )
 
 // ArticleModel is a model for entity.Article
 type Streamed struct {
-	Id       *TV    `gorm:"foreignKey:id" json:"id"`
+	gorm.Model
+	Id       TV     `gorm:"foreignKey:Id" json:"id"`
 	Platform string `gorm:"type:varchar;not_null" json:"platform"`
 }
 
-func NewStreamed(id *TV, platform string) *Streamed {
+func NewStreamed(id TV, platform string) *Streamed {
 	return &Streamed{
 		Id:       id,
 		Platform: platform,

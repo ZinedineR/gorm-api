@@ -1,9 +1,9 @@
 package main
 
 import (
+	"api-gorm-setting/config"
+	"api-gorm-setting/entity"
 	"fmt"
-	"gorm/entity"
-	"gorm/internal/config"
 	"os"
 	"sort"
 

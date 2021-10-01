@@ -1,4 +1,4 @@
-module gorm
+module api-gorm-setting
 
 go 1.17
 

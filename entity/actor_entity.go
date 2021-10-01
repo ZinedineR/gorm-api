@@ -1,16 +1,19 @@
 package entity
 
+import "gorm.io/gorm"
+
 const (
 	ActorTableName = "actor"
 )
 
 // ArticleModel is a model for entity.Article
 type Actor struct {
-	Id   *TV    `gorm:"foreignKey:id" json:"id"`
+	gorm.Model
+	Id   TV     `gorm:"foreignKey:Id" json:"id"`
 	Name string `gorm:"type:varchar;not_null" json:"name"`
 }
 
-func NewActor(id *TV, name string) *Actor {
+func NewActor(id TV, name string) *Actor {
 	return &Actor{
 		Id:   id,
 		Name: name,
