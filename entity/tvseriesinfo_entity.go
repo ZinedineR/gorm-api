@@ -2,7 +2,6 @@ package entity
 
 import (
 	"github.com/gofrs/uuid"
-	"gorm.io/gorm"
 )
 
 const (
@@ -11,7 +10,6 @@ const (
 
 // ArticleModel is a model for entity.Article
 type TV struct {
-	gorm.Model
 	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
 	Title    string    `gorm:"type:varchar;not_null" json:"title"`
 	Producer string    `gorm:"type:varchar;null" json:"producer"`

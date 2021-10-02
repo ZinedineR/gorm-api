@@ -1,6 +1,6 @@
 package entity
 
-import "gorm.io/gorm"
+import "github.com/gofrs/uuid"
 
 const (
 	WatchedTableName = "watched"
@@ -8,17 +8,19 @@ const (
 
 // ArticleModel is a model for entity.Article
 type Watched struct {
-	gorm.Model
-	Id       Detailed `gorm:"foreignKey:Id" json:"id"`
-	Season   int      `gorm:"type:int;not_null" json:"season"`
-	Episodes int      `gorm:"type:int;not_null" json:"episodes"`
+	Id         uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	Watched_id uuid.UUID `gorm:"type:uuid;not_null" json:"watched_id"`
+	Season     int       `gorm:"type:int;not_null" json:"season"`
+	Episodes   int       `gorm:"type:int;not_null" json:"episodes"`
+	Detailed   *Detailed `gorm:"foreignKey:Watched_id" json:"detailed"`
 }
 
-func NewWatched(id Detailed, season, episodes int) *Watched {
+func NewWatched(id, watched_id uuid.UUID, season, episodes int) *Watched {
 	return &Watched{
-		Id:       id,
-		Season:   season,
-		Episodes: episodes,
+		Id:         id,
+		Watched_id: watched_id,
+		Season:     season,
+		Episodes:   episodes,
 	}
 }
 

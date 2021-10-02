@@ -1,6 +1,6 @@
 package entity
 
-import "gorm.io/gorm"
+import "github.com/gofrs/uuid"
 
 const (
 	ActorTableName = "actor"
@@ -8,15 +8,17 @@ const (
 
 // ArticleModel is a model for entity.Article
 type Actor struct {
-	gorm.Model
-	Id   TV     `gorm:"foreignKey:Id" json:"id"`
-	Name string `gorm:"type:varchar;not_null" json:"name"`
+	Id    uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	TV_id uuid.UUID `gorm:"type:uuid;not_null" json:"tv_id"`
+	Name  string    `gorm:"type:varchar;not_null" json:"name"`
+	TV    *TV       `gorm:"foreignKey:TV_id" json:"tv"`
 }
 
-func NewActor(id TV, name string) *Actor {
+func NewActor(id, tv_id uuid.UUID, name string) *Actor {
 	return &Actor{
-		Id:   id,
-		Name: name,
+		Id:    id,
+		TV_id: tv_id,
+		Name:  name,
 	}
 }
 

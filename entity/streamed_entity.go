@@ -1,6 +1,6 @@
 package entity
 
-import "gorm.io/gorm"
+import "github.com/gofrs/uuid"
 
 const (
 	StreamedTableName = "streamed"
@@ -8,15 +8,17 @@ const (
 
 // ArticleModel is a model for entity.Article
 type Streamed struct {
-	gorm.Model
-	Id       TV     `gorm:"foreignKey:Id" json:"id"`
-	Platform string `gorm:"type:varchar;not_null" json:"platform"`
+	Id          uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
+	Streamed_id uuid.UUID `gorm:"type:uuid;not_null" json:"streamed_id"`
+	Platform    string    `gorm:"type:varchar;not_null" json:"platform"`
+	TV          *TV       `gorm:"foreignKey:Streamed_id" json:"tv"`
 }
 
-func NewStreamed(id TV, platform string) *Streamed {
+func NewStreamed(id, streamed_id uuid.UUID, platform string) *Streamed {
 	return &Streamed{
-		Id:       id,
-		Platform: platform,
+		Id:          id,
+		Streamed_id: streamed_id,
+		Platform:    platform,
 	}
 }
 

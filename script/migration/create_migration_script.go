@@ -1,7 +1,7 @@
 package main
 
 import (
-	"api-gorm-setting/config"
+	"api-gorm-setting/configuration/config"
 	"api-gorm-setting/entity"
 	"fmt"
 	"os"
@@ -38,13 +38,16 @@ func main() {
 
 	// Migrate rest of the models
 	log.Info().Msg("AutoMigrate Model [table_name]")
-
-	// log.Info().Msg("  TableModel [" + (&entity.Article{}).TableName() + "]")
 	db.AutoMigrate(&entity.TV{})
+	log.Info().Msg("  TableModel [" + (&entity.TV{}).TableName() + "]")
 	db.AutoMigrate(&entity.Detailed{})
+	log.Info().Msg("  TableModel [" + (&entity.Detailed{}).TableName() + "]")
 	db.AutoMigrate(&entity.Watched{})
+	log.Info().Msg("  TableModel [" + (&entity.Watched{}).TableName() + "]")
 	db.AutoMigrate(&entity.Actor{})
+	log.Info().Msg("  TableModel [" + (&entity.Actor{}).TableName() + "]")
 	db.AutoMigrate(&entity.Streamed{})
+	log.Info().Msg("  TableModel [" + (&entity.Streamed{}).TableName() + "]")
 
 }
 
