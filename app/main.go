@@ -37,15 +37,25 @@ func main() {
 			_ = sqlDB.Close()
 		}
 	}()
-	TVHandler := buildTVHandler(db)
-	engineTV := http.NewGinEngineTV(TVHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
-	serverTV := &nethttp.Server{
+	// TVHandler := buildTVHandler(db)
+	// engineTV := http.NewGinEngineTV(TVHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	// serverTV := &nethttp.Server{
+	// 	Addr:    fmt.Sprintf(":%s", cfg.Port),
+	// 	Handler: engineTV,
+	// }
+	// // setGinMode(cfg.Env)
+	// runServer(serverTV)
+	// waitForShutdown(serverTV)
+
+	StreamedHandler := buildStreamedHandler(db)
+	engineStreamed := http.NewGinEngineStreamed(StreamedHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	serverStreamed := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
-		Handler: engineTV,
+		Handler: engineStreamed,
 	}
 	// setGinMode(cfg.Env)
-	runServer(serverTV)
-	waitForShutdown(serverTV)
+	runServer(serverStreamed)
+	waitForShutdown(serverStreamed)
 }
 
 func runServer(srv *nethttp.Server) {
@@ -103,4 +113,10 @@ func buildTVHandler(db *gorm.DB) *http.TVHandler {
 	repo := repository.NewTVRepository(db)
 	TVService := service.NewTVService(repo)
 	return http.NewTVHandler(TVService)
+}
+
+func buildStreamedHandler(db *gorm.DB) *http.StreamedHandler {
+	repo := repository.NewStreamedRepository(db)
+	StreamedService := service.NewStreamedService(repo)
+	return http.NewStreamedHandler(StreamedService)
 }

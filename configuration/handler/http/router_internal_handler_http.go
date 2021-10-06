@@ -28,3 +28,39 @@ func NewGinEngineTV(tvHandler *TVHandler, internalUsername, internalPassword str
 
 	return engine
 }
+
+func NewGinEngineStreamed(streamedHandler *StreamedHandler, internalUsername, internalPassword string) *echo.Echo {
+	engine := echo.New()
+
+	// CORS
+	// engine.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+	// 	AllowAllOrigins: true,
+	// 	AllowHeaders:    []string{"Origin", "Content-Length", "Content-Type", "Authorization", "SVC_USER", "SVC_PASS"},
+	// 	AllowMethods:    []string{"GET", "POST", "PUT", "PATCH"},
+	// }))
+
+	engine.POST("/create-streamed", streamedHandler.CreateStreamed)
+	engine.GET("/list-streamed", streamedHandler.GetListStreamed)
+	engine.GET("/get-streamed/:id", streamedHandler.GetDetailStreamed)
+	engine.PUT("/update-streamed/:id", streamedHandler.UpdateStreamed)
+	engine.DELETE("/delete-streamed/:id", streamedHandler.DeleteStreamed)
+
+	return engine
+}
+
+// func Router() *mux.Router {
+
+// 	router := mux.NewRouter()
+// 	//api tvseries_info
+// 	router.HandleFunc("/api/tv", StreamedHandler.CreateStreamed).Methods("GET", "OPTIONS")
+// 	router.HandleFunc("/api/tv/{id}", controller.GetTV).Methods("GET", "OPTIONS")
+// 	router.HandleFunc("/api/tv", controller.NewTV).Methods("POST", "OPTIONS")
+// 	router.HandleFunc("/api/tv/{id}", controller.UpdateTVNew).Methods("PUT", "OPTIONS")
+// 	router.HandleFunc("/api/tv/{id}", controller.RemoveTV).Methods("DELETE", "OPTIONS")
+// 	//api detailed
+// 	router.HandleFunc("/api/detail", controller.GetDetailedAll).Methods("GET", "OPTIONS")
+// 	router.HandleFunc("/api/detail", controller.NewDetailed).Methods("POST", "OPTIONS")
+// 	router.HandleFunc("/api/detail/{id}", controller.RemoveDetailed).Methods("DELETE", "OPTIONS")
+
+// 	return router
+// }
