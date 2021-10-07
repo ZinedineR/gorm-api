@@ -10,48 +10,53 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-// CreateStreamedBodyRequest defines all body attributes needed to add Streamed.
-type CreateStreamedBodyRequest struct {
-	Streamed_id uuid.UUID `json:"streamed_id" binding:"required"`
-	Platform    string    `json:"platform" binding:"required"`
+// CreateWatchedBodyRequest defines all body attributes needed to add Watched.
+type CreateWatchedBodyRequest struct {
+	Watched_id uuid.UUID `json:"watched_id" binding:"required"`
+	Season     int       `json:"season" binding:"required"`
+	Episodes   int       `json:"episodes" binding:"required"`
 }
 
-// StreamedRowResponse defines all attributes needed to fulfill for Streamed row entity.
-type StreamedRowResponse struct {
-	Id          uuid.UUID `json:"id"`
-	Streamed_id uuid.UUID `json:"streamed_id"`
-	Platform    string    `json:"platform"`
+// WatchedRowResponse defines all attributes needed to fulfill for Watched row entity.
+type WatchedRowResponse struct {
+	Id         uuid.UUID `json:"id"`
+	Watched_id uuid.UUID `json:"watched_id"`
+	Season     int       `json:"season"`
+	Episodes   int       `json:"episodes"`
 }
 
-// StreamedResponse defines all attributes needed to fulfill for pic Streamed entity.
-type StreamedDetailResponse struct {
-	Id          uuid.UUID `json:"id"`
-	Streamed_id uuid.UUID `json:"streamed_id"`
-	Platform    string    `json:"platform"`
+// WatchedResponse defines all attributes needed to fulfill for pic Watched entity.
+type WatchedDetailResponse struct {
+	Id         uuid.UUID `json:"id"`
+	Watched_id uuid.UUID `json:"watched_id"`
+	Season     int       `json:"season"`
+	Episodes   int       `json:"episodes"`
 }
 
-func buildStreamedRowResponse(Streamed *entity.Streamed) StreamedRowResponse {
-	form := StreamedRowResponse{
-		Id:          Streamed.Id,
-		Streamed_id: Streamed.Streamed_id,
-		Platform:    Streamed.Platform,
+func buildWatchedRowResponse(Watched *entity.Watched) WatchedRowResponse {
+	form := WatchedRowResponse{
+		Id:         Watched.Id,
+		Watched_id: Watched.Watched_id,
+		Season:     Watched.Season,
+		Episodes:   Watched.Episodes,
 	}
 
 	return form
 }
 
-func buildStreamedDetailResponse(Streamed *entity.Streamed) StreamedDetailResponse {
-	form := StreamedDetailResponse{
-		Id:          Streamed.Id,
-		Streamed_id: Streamed.Streamed_id,
-		Platform:    Streamed.Platform,
+func buildWatchedDetailResponse(Watched *entity.Watched) WatchedDetailResponse {
+	form := WatchedDetailResponse{
+		Id:         Watched.Id,
+		Watched_id: Watched.Watched_id,
+		Season:     Watched.Season,
+		Episodes:   Watched.Episodes,
 	}
 
 	return form
 }
 
-// QueryParamsStreamed defines all attributes for input query params
-type QueryParamsStreamed struct {
+// QueryParamsWatched defines all attributes for input query params
+type QueryParamsWatched struct {
 	Limit  string `form:"limit"`
 	Offset string `form:"offset"`
 	SortBy string `form:"sort_by"`
@@ -59,77 +64,78 @@ type QueryParamsStreamed struct {
 	Status string `form:"status"`
 }
 
-// MetaStreamed define attributes needed for Meta
-type MetaStreamed struct {
+// MetaWatched define attributes needed for Meta
+type MetaWatched struct {
 	Limit  int   `json:"limit"`
 	Offset int   `json:"offset"`
 	Total  int64 `json:"total"`
 }
 
-// NewMetaStreamed creates an instance of Meta response.
-func NewMetaStreamed(limit, offset int, total int64) *MetaStreamed {
-	return &MetaStreamed{
+// NewMetaWatched creates an instance of Meta response.
+func NewMetaWatched(limit, offset int, total int64) *MetaWatched {
+	return &MetaWatched{
 		Limit:  limit,
 		Offset: offset,
 		Total:  total,
 	}
 }
 
-// StreamedHandler handles HTTP request related to user flow.
-type StreamedHandler struct {
-	service service.StreamedUseCase
+// WatchedHandler handles HTTP request related to user flow.
+type WatchedHandler struct {
+	service service.WatchedUseCase
 }
 
-// NewStreamedHandler creates an instance of StreamedHandler.
-func NewStreamedHandler(service service.StreamedUseCase) *StreamedHandler {
-	return &StreamedHandler{
+// NewWatchedHandler creates an instance of WatchedHandler.
+func NewWatchedHandler(service service.WatchedUseCase) *WatchedHandler {
+	return &WatchedHandler{
 		service: service,
 	}
 }
 
 // Create handles article creation.
 // It will reject the request if the request doesn't have required data,
-func (handler *StreamedHandler) CreateStreamed(echoCtx echo.Context) error {
-	var form CreateStreamedBodyRequest
+func (handler *WatchedHandler) CreateWatched(echoCtx echo.Context) error {
+	var form CreateWatchedBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 
 	}
 
-	StreamedEntity := entity.NewStreamed(
+	WatchedEntity := entity.NewWatched(
 		uuid.Nil,
-		form.Streamed_id,
-		form.Platform,
+		form.Watched_id,
+		form.Season,
+		form.Episodes,
 	)
 
-	if err := handler.service.Create(echoCtx.Request().Context(), StreamedEntity); err != nil {
+	if err := handler.service.Create(echoCtx.Request().Context(), WatchedEntity); err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
 
-	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", StreamedEntity)
+	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", WatchedEntity)
 	return echoCtx.JSON(res.Status, res)
 }
 
-func (handler *StreamedHandler) GetListStreamed(echoCtx echo.Context) error {
-	var form QueryParamsStreamed
+func (handler *WatchedHandler) GetListWatched(echoCtx echo.Context) error {
+	var form QueryParamsWatched
 	if err := echoCtx.Bind(&form); err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
 	}
 
-	Streamed, err := handler.service.GetListStreamed(echoCtx.Request().Context(), form.Limit, form.Offset)
+	Watched, err := handler.service.GetListWatched(echoCtx.Request().Context(), form.Limit, form.Offset)
 	if err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
-	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Streamed)
+	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Watched)
 	return echoCtx.JSON(res.Status, res)
 
 }
 
-func (handler *StreamedHandler) GetDetailStreamed(echoCtx echo.Context) error {
+func (handler *WatchedHandler) GetDetailWatched(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
 		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
@@ -142,18 +148,18 @@ func (handler *StreamedHandler) GetDetailStreamed(echoCtx echo.Context) error {
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
-	Streamed, err := handler.service.GetDetailStreamed(echoCtx.Request().Context(), id)
+	Watched, err := handler.service.GetDetailWatched(echoCtx.Request().Context(), id)
 	if err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
-	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Streamed)
+	var res = entity.NewResponse(nethttp.StatusOK, "Request processed successfully.", Watched)
 	return echoCtx.JSON(res.Status, res)
 }
 
-func (handler *StreamedHandler) UpdateStreamed(echoCtx echo.Context) error {
-	var form CreateStreamedBodyRequest
+func (handler *WatchedHandler) UpdateWatched(echoCtx echo.Context) error {
+	var form CreateWatchedBodyRequest
 	if err := echoCtx.Bind(&form); err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInvalidInput)
 		return echoCtx.JSON(nethttp.StatusBadRequest, errorResponse)
@@ -173,19 +179,20 @@ func (handler *StreamedHandler) UpdateStreamed(echoCtx echo.Context) error {
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
-	_, err = handler.service.GetDetailStreamed(echoCtx.Request().Context(), id)
+	_, err = handler.service.GetDetailWatched(echoCtx.Request().Context(), id)
 	if err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
-	StreamedEntity := entity.NewStreamed(
+	WatchedEntity := entity.NewWatched(
 		id,
-		form.Streamed_id,
-		form.Platform,
+		form.Watched_id,
+		form.Season,
+		form.Episodes,
 	)
 
-	if err := handler.service.UpdateStreamed(echoCtx.Request().Context(), StreamedEntity); err != nil {
+	if err := handler.service.UpdateWatched(echoCtx.Request().Context(), WatchedEntity); err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
 		return echoCtx.JSON(nethttp.StatusInternalServerError, errorResponse)
 	}
@@ -194,7 +201,7 @@ func (handler *StreamedHandler) UpdateStreamed(echoCtx echo.Context) error {
 	return echoCtx.JSON(res.Status, res)
 }
 
-func (handler *StreamedHandler) DeleteStreamed(echoCtx echo.Context) error {
+func (handler *WatchedHandler) DeleteWatched(echoCtx echo.Context) error {
 	idParam := echoCtx.Param("id")
 	if len(idParam) == 0 {
 		errorResponse := buildErrorResponse(nil, entity.ErrInvalidInput)
@@ -207,7 +214,7 @@ func (handler *StreamedHandler) DeleteStreamed(echoCtx echo.Context) error {
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
 	}
 
-	err = handler.service.DeleteStreamed(echoCtx.Request().Context(), id)
+	err = handler.service.DeleteWatched(echoCtx.Request().Context(), id)
 	if err != nil {
 		errorResponse := buildErrorResponse(err, entity.ErrInternalServerError)
 		return echoCtx.JSON(http.StatusBadRequest, errorResponse)
