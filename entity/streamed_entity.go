@@ -1,6 +1,6 @@
 package entity
 
-import "github.com/gofrs/uuid"
+import "github.com/google/uuid"
 
 const (
 	StreamedTableName = "streamed"

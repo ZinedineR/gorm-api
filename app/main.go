@@ -37,15 +37,25 @@ func main() {
 			_ = sqlDB.Close()
 		}
 	}()
-	TVHandler := buildTVHandler(db)
-	engineTV := http.NewGinEngineTV(TVHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
-	serverTV := &nethttp.Server{
+	// TVHandler := buildTVHandler(db)
+	// engineTV := http.NewGinEngineTV(TVHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	// serverTV := &nethttp.Server{
+	// 	Addr:    fmt.Sprintf(":%s", cfg.Port),
+	// 	Handler: engineTV,
+	// }
+	// // setGinMode(cfg.Env)
+	// runServer(serverTV)
+	// waitForShutdown(serverTV)
+	DetailedHandler := buildDetailedHandler(db)
+	ActorHandler := buildActorHandler(db)
+	engine := http.NewGinEngine(DetailedHandler, ActorHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
-		Handler: engineTV,
+		Handler: engine,
 	}
 	// setGinMode(cfg.Env)
-	runServer(serverTV)
-	waitForShutdown(serverTV)
+	runServer(server)
+	waitForShutdown(server)
 }
 
 func runServer(srv *nethttp.Server) {
@@ -67,17 +77,17 @@ func waitForShutdown(server *nethttp.Server) {
 	// kill -9 is syscall.SIGKILL but can't be catch, so don't need add it
 	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
 	<-quit
-	log.Info().Msg("shutting down codelabs-service")
+	log.Info().Msg("shutting down api-gorm-setting")
 
 	// The context is used to inform the server it has 2 seconds to finish
 	// the request it is currently handling
 	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
 	defer cancel()
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatal().Err(err).Msg("codelabs-service forced to shutdown")
+		log.Fatal().Err(err).Msg("api-gorm-setting forced to shutdown")
 	}
 
-	log.Info().Msg("codelabs-service exiting")
+	log.Info().Msg("api-gorm-setting exiting")
 }
 
 func openDatabase(config *config.Config) *gorm.DB {
@@ -99,8 +109,14 @@ func checkError(err error) {
 	}
 }
 
-func buildTVHandler(db *gorm.DB) *http.TVHandler {
-	repo := repository.NewTVRepository(db)
-	TVService := service.NewTVService(repo)
-	return http.NewTVHandler(TVService)
+func buildDetailedHandler(db *gorm.DB) *http.DetailedHandler {
+	repo := repository.NewDetailedRepository(db)
+	DetailedService := service.NewDetailedService(repo)
+	return http.NewDetailedHandler(DetailedService)
+}
+
+func buildActorHandler(db *gorm.DB) *http.ActorHandler {
+	repo := repository.NewActorRepository(db)
+	ActorService := service.NewActorService(repo)
+	return http.NewActorHandler(ActorService)
 }
