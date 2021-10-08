@@ -4,10 +4,11 @@ go 1.17
 
 require (
 	cloud.google.com/go/errorreporting v0.1.0
-	github.com/gofrs/uuid v4.0.0+incompatible
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/google/uuid v1.3.0
 	github.com/joeshaw/envdecode v0.0.0-20200121155833-099f1fc765bd
 	github.com/joho/godotenv v1.4.0
+	github.com/labstack/echo v3.3.10+incompatible
 	github.com/labstack/echo/v4 v4.6.1
 	github.com/pkg/errors v0.9.1
 	github.com/rs/zerolog v1.25.0
@@ -20,6 +21,7 @@ require (
 require (
 	cloud.google.com/go v0.92.2 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
+	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.6 // indirect

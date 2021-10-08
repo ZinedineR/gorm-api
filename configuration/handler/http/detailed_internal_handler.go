@@ -12,7 +12,7 @@ import (
 
 // CreateDetailedBodyRequest defines all body attributes needed to add Detailed.
 type CreateDetailedBodyRequest struct {
-	Detailed_id uuid.UUID `json:"Detailed_id" binding:"required"`
+	Detailed_id uuid.UUID `json:"detailed_id" binding:"required"`
 	Season      int       `json:"season" binding:"required"`
 	Episodes    int       `json:"episodes" binding:"required"`
 	Year        int       `json:"year" binding:"required"`
@@ -21,7 +21,7 @@ type CreateDetailedBodyRequest struct {
 // DetailedRowResponse defines all attributes needed to fulfill for Detailed row entity.
 type DetailedRowResponse struct {
 	Id          uuid.UUID `json:"id"`
-	Detailed_id uuid.UUID `json:"Detailed_id"`
+	Detailed_id uuid.UUID `json:"detailed_id"`
 	Season      int       `json:"season"`
 	Episodes    int       `json:"episodes"`
 	Year        int       `json:"year"`
@@ -30,7 +30,7 @@ type DetailedRowResponse struct {
 // DetailedResponse defines all attributes needed to fulfill for pic Detailed entity.
 type DetailedDetailResponse struct {
 	Id          uuid.UUID `json:"id"`
-	Detailed_id uuid.UUID `json:"Detailed_id"`
+	Detailed_id uuid.UUID `json:"detailed_id"`
 	Season      int       `json:"season"`
 	Episodes    int       `json:"episodes"`
 	Year        int       `json:"year"`

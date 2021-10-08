@@ -11,7 +11,7 @@ type Actor struct {
 	Id    uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
 	TV_id uuid.UUID `gorm:"type:uuid;not_null" json:"tv_id"`
 	Name  string    `gorm:"type:varchar;not_null" json:"name"`
-	TV    *TV       `gorm:"foreignKey:TV_id" json:"tv"`
+	TV    *TV       `gorm:"foreignKey:TV_id"`
 }
 
 func NewActor(id, tv_id uuid.UUID, name string) *Actor {

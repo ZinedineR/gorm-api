@@ -12,7 +12,7 @@ const (
 type TV struct {
 	Id       uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
 	Title    string    `gorm:"type:varchar;not_null" json:"title"`
-	Producer string    `gorm:"type:varchar;null" json:"producer"`
+	Producer string    `gorm:"type:varchar;null"`
 }
 
 func NewTV(id uuid.UUID, title, producer string) *TV {

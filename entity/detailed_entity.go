@@ -13,7 +13,7 @@ type Detailed struct {
 	Season      int       `gorm:"type:int;not_null" json:"season"`
 	Episodes    int       `gorm:"type:int;not_null" json:"episodes"`
 	Year        int       `gorm:"type:int;not_null" json:"year"`
-	TV          string    `gorm:"foreignKey:Detailed_id" json:"detailed"`
+	TV          *TV       `gorm:"foreignKey:Detailed_id"`
 }
 
 func NewDetailed(id, detailed_id uuid.UUID, season, episodes, year int) *Detailed {

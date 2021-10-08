@@ -11,7 +11,7 @@ type Streamed struct {
 	Id          uuid.UUID `gorm:"type:uuid;primary_key" json:"id"`
 	Streamed_id uuid.UUID `gorm:"type:uuid;not_null" json:"streamed_id"`
 	Platform    string    `gorm:"type:varchar;not_null" json:"platform"`
-	TV          *TV       `gorm:"foreignKey:Streamed_id" json:"tv"`
+	TV          *TV       `gorm:"foreignKey:Streamed_id"`
 }
 
 func NewStreamed(id, streamed_id uuid.UUID, platform string) *Streamed {
