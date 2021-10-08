@@ -1,6 +1,6 @@
 package entity
 
-import "github.com/gofrs/uuid"
+import "github.com/google/uuid"
 
 const (
 	DetailedTableName = "detailed"
@@ -13,7 +13,7 @@ type Detailed struct {
 	Season      int       `gorm:"type:int;not_null" json:"season"`
 	Episodes    int       `gorm:"type:int;not_null" json:"episodes"`
 	Year        int       `gorm:"type:int;not_null" json:"year"`
-	TV          *TV       `gorm:"foreignKey:Detailed_id" json:"detailed"`
+	TV          string    `gorm:"foreignKey:Detailed_id" json:"detailed"`
 }
 
 func NewDetailed(id, detailed_id uuid.UUID, season, episodes, year int) *Detailed {

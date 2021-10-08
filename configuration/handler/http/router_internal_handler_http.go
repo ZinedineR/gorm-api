@@ -6,7 +6,8 @@ import (
 
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
-func NewGinEngine(tvHandler *TVHandler, streamedHandler *StreamedHandler, watchedHandler *WatchedHandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(tvHandler *TVHandler, streamedHandler *StreamedHandler, watchedHandler *WatchedHandler, detailedHandler *DetailedHandler, actorHandler *ActorHandler, internalUsername, internalPassword string) *echo.Echo {
+
 	engine := echo.New()
 
 	// CORS
@@ -38,6 +39,18 @@ func NewGinEngine(tvHandler *TVHandler, streamedHandler *StreamedHandler, watche
 	engine.GET("/get-watched/:id", watchedHandler.GetDetailWatched)
 	engine.PUT("/update-watched/:id", watchedHandler.UpdateWatched)
 	engine.DELETE("/delete-watched/:id", watchedHandler.DeleteWatched)
+  //Detailed
+	engine.POST("/create-Detailed", detailedHandler.CreateDetailed)
+	engine.GET("/list-Detailed", detailedHandler.GetListDetailed)
+	engine.GET("/get-Detailed/:id", detailedHandler.GetDetailDetailed)
+	engine.PUT("/update-Detailed/:id", detailedHandler.UpdateDetailed)
+	engine.DELETE("/delete-Detailed/:id", detailedHandler.DeleteDetailed)
+	//Actor
+	engine.POST("/create-Actor", actorHandler.CreateActor)
+	engine.GET("/list-Actor", actorHandler.GetListActor)
+	engine.GET("/get-Detailed/:id", actorHandler.GetDetailActor)
+	engine.PUT("/update-Detailed/:id", actorHandler.UpdateActor)
+	engine.DELETE("/delete-Detailed/:id", actorHandler.DeleteActor)
 
 	return engine
 }
