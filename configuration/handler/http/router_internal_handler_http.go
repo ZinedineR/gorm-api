@@ -39,18 +39,18 @@ func NewGinEngine(tvHandler *TVHandler, streamedHandler *StreamedHandler, watche
 	engine.GET("/get-watched/:id", watchedHandler.GetDetailWatched)
 	engine.PUT("/update-watched/:id", watchedHandler.UpdateWatched)
 	engine.DELETE("/delete-watched/:id", watchedHandler.DeleteWatched)
-  //Detailed
-	engine.POST("/create-Detailed", detailedHandler.CreateDetailed)
-	engine.GET("/list-Detailed", detailedHandler.GetListDetailed)
-	engine.GET("/get-Detailed/:id", detailedHandler.GetDetailDetailed)
-	engine.PUT("/update-Detailed/:id", detailedHandler.UpdateDetailed)
-	engine.DELETE("/delete-Detailed/:id", detailedHandler.DeleteDetailed)
+	//Detailed
+	engine.POST("/create-detailed", detailedHandler.CreateDetailed)
+	engine.GET("/list-detailed", detailedHandler.GetListDetailed)
+	engine.GET("/get-detailed/:id", detailedHandler.GetDetailDetailed)
+	engine.PUT("/update-detailed/:id", detailedHandler.UpdateDetailed)
+	engine.DELETE("/delete-detailed/:id", detailedHandler.DeleteDetailed)
 	//Actor
-	engine.POST("/create-Actor", actorHandler.CreateActor)
-	engine.GET("/list-Actor", actorHandler.GetListActor)
-	engine.GET("/get-Detailed/:id", actorHandler.GetDetailActor)
-	engine.PUT("/update-Detailed/:id", actorHandler.UpdateActor)
-	engine.DELETE("/delete-Detailed/:id", actorHandler.DeleteActor)
+	engine.POST("/create-actor", actorHandler.CreateActor)
+	engine.GET("/list-actor", actorHandler.GetListActor)
+	engine.GET("/get-actor/:id", actorHandler.GetDetailActor)
+	engine.PUT("/update-actor/:id", actorHandler.UpdateActor)
+	engine.DELETE("/delete-actor/:id", actorHandler.DeleteActor)
 
 	return engine
 }

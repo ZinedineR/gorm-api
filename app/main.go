@@ -40,7 +40,7 @@ func main() {
 	TVHandler := buildTVHandler(db)
 	StreamedHandler := buildStreamedHandler(db)
 	WatchedHandler := buildWatchedHandler(db)
-  DetailedHandler := buildDetailedHandler(db)
+	DetailedHandler := buildDetailedHandler(db)
 	ActorHandler := buildActorHandler(db)
 	engine := http.NewGinEngine(TVHandler, StreamedHandler, WatchedHandler, DetailedHandler, ActorHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 	server := &nethttp.Server{
