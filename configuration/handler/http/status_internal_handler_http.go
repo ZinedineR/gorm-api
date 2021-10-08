@@ -4,7 +4,7 @@ import (
 	"api-gorm-setting/entity"
 	"net/http"
 
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
 // Status returns health check for the service.

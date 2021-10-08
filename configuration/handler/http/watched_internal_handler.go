@@ -7,7 +7,7 @@ import (
 	nethttp "net/http"
 
 	"github.com/google/uuid"
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
 // CreateWatchedBodyRequest defines all body attributes needed to add Watched.

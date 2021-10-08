@@ -1,12 +1,12 @@
 package http
 
 import (
-	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo"
 )
 
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
-func NewGinEngine(tvHandler *TVHandler, streamedHandler *StreamedHandler, watchedHandler *WatchedHandler, detailedHandler *DetailedHandler, actorHandler *ActorHandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(tvHandler *TVHandler, streamedHandler *StreamedHandler, watchedHandler *WatchedHandler, detailedHandler *DetailedHandler, actorHandler *ActorHandler, h *Loginhandler, internalUsername, internalPassword string) *echo.Echo {
 
 	engine := echo.New()
 
@@ -18,16 +18,17 @@ func NewGinEngine(tvHandler *TVHandler, streamedHandler *StreamedHandler, watche
 	// }))
 
 	engine.GET("/", Status)
-	// engine.POST("/login", h)
-	// engine.GET("/healthz", Health)
+	engine.POST("/login", h.Login)
+	engine.GET("/private", h.Private, IsLoggedIn)
+	engine.GET("/admin", h.Private, IsLoggedIn, isAdmin)
 	engine.GET("/version", Version)
 
 	//tv
-	engine.POST("/create-TV", tvHandler.CreateTV)
-	engine.GET("/list-TV", tvHandler.GetListTV)
-	engine.GET("/get-TV/:id", tvHandler.GetDetailTV)
-	engine.PUT("/update-TV/:id", tvHandler.UpdateTV)
-	engine.DELETE("/delete-TV/:id", tvHandler.DeleteTV)
+	engine.POST("/create-TV", tvHandler.CreateTV, IsLoggedIn, isAdmin)
+	engine.GET("/list-TV", tvHandler.GetListTV, IsLoggedIn)
+	engine.GET("/get-TV/:id", tvHandler.GetDetailTV, IsLoggedIn)
+	engine.PUT("/update-TV/:id", tvHandler.UpdateTV, IsLoggedIn, isAdmin)
+	engine.DELETE("/delete-TV/:id", tvHandler.DeleteTV, IsLoggedIn, isAdmin)
 	//streamed
 	engine.POST("/create-streamed", streamedHandler.CreateStreamed)
 	engine.GET("/list-streamed", streamedHandler.GetListStreamed)

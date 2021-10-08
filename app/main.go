@@ -42,12 +42,14 @@ func main() {
 	WatchedHandler := buildWatchedHandler(db)
 	DetailedHandler := buildDetailedHandler(db)
 	ActorHandler := buildActorHandler(db)
-	engine := http.NewGinEngine(TVHandler, StreamedHandler, WatchedHandler, DetailedHandler, ActorHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	LoginHandler := &http.Loginhandler{}
+	engine := http.NewGinEngine(TVHandler, StreamedHandler, WatchedHandler, DetailedHandler, ActorHandler, LoginHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
 	}
 	// setGinMode(cfg.Env)
+	// authenticate()
 	runServer(server)
 	waitForShutdown(server)
 }
