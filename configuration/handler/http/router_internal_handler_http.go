@@ -6,7 +6,8 @@ import (
 
 // NewGinEngine creates an instance of echo.Engine.
 // gin.Engine already implements net/http.Handler interface.
-func NewGinEngine(detailedHandler *DetailedHandler, actorHandler *ActorHandler, internalUsername, internalPassword string) *echo.Echo {
+func NewGinEngine(tvHandler *TVHandler, streamedHandler *StreamedHandler, watchedHandler *WatchedHandler, detailedHandler *DetailedHandler, actorHandler *ActorHandler, internalUsername, internalPassword string) *echo.Echo {
+
 	engine := echo.New()
 
 	// CORS
@@ -19,7 +20,26 @@ func NewGinEngine(detailedHandler *DetailedHandler, actorHandler *ActorHandler, 
 	engine.GET("/", Status)
 	// engine.GET("/healthz", Health)
 	engine.GET("/version", Version)
-	//Detailed
+
+	//tv
+	engine.POST("/create-TV", tvHandler.CreateTV)
+	engine.GET("/list-TV", tvHandler.GetListTV)
+	engine.GET("/get-TV/:id", tvHandler.GetDetailTV)
+	engine.PUT("/update-TV/:id", tvHandler.UpdateTV)
+	engine.DELETE("/delete-TV/:id", tvHandler.DeleteTV)
+	//streamed
+	engine.POST("/create-streamed", streamedHandler.CreateStreamed)
+	engine.GET("/list-streamed", streamedHandler.GetListStreamed)
+	engine.GET("/get-streamed/:id", streamedHandler.GetDetailStreamed)
+	engine.PUT("/update-streamed/:id", streamedHandler.UpdateStreamed)
+	engine.DELETE("/delete-streamed/:id", streamedHandler.DeleteStreamed)
+	//watched
+	engine.POST("/create-watched", watchedHandler.CreateWatched)
+	engine.GET("/list-watched", watchedHandler.GetListWatched)
+	engine.GET("/get-watched/:id", watchedHandler.GetDetailWatched)
+	engine.PUT("/update-watched/:id", watchedHandler.UpdateWatched)
+	engine.DELETE("/delete-watched/:id", watchedHandler.DeleteWatched)
+  //Detailed
 	engine.POST("/create-Detailed", detailedHandler.CreateDetailed)
 	engine.GET("/list-Detailed", detailedHandler.GetListDetailed)
 	engine.GET("/get-Detailed/:id", detailedHandler.GetDetailDetailed)
@@ -31,5 +51,6 @@ func NewGinEngine(detailedHandler *DetailedHandler, actorHandler *ActorHandler, 
 	engine.GET("/get-Detailed/:id", actorHandler.GetDetailActor)
 	engine.PUT("/update-Detailed/:id", actorHandler.UpdateActor)
 	engine.DELETE("/delete-Detailed/:id", actorHandler.DeleteActor)
+
 	return engine
 }
