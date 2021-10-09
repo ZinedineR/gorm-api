@@ -53,6 +53,8 @@ func NewGinEngine(tvHandler *TVHandler, streamedHandler *StreamedHandler, watche
 	engine.GET("/get-actor/:id", actorHandler.GetDetailActor)
 	engine.PUT("/update-actor/:id", actorHandler.UpdateActor)
 	engine.DELETE("/delete-actor/:id", actorHandler.DeleteActor)
+	//User
+	engine.POST("/create-user", userHandler.CreateUser)
 
 	return engine
 }

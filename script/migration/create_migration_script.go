@@ -48,6 +48,8 @@ func main() {
 	log.Info().Msg("  TableModel [" + (&entity.Actor{}).TableName() + "]")
 	db.AutoMigrate(&entity.Streamed{})
 	log.Info().Msg("  TableModel [" + (&entity.Streamed{}).TableName() + "]")
+	db.AutoMigrate(&entity.User{})
+	log.Info().Msg("  TableModel [" + (&entity.User{}).TableName() + "]")
 
 }
 
