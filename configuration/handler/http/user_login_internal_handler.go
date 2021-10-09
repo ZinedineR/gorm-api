@@ -1,12 +1,15 @@
 package http
 
 import (
+	"api-gorm-setting/configuration/config"
 	"api-gorm-setting/entity"
 	"api-gorm-setting/service"
+	"log"
 	nethttp "net/http"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo"
+	_ "github.com/lib/pq"
 )
 
 // CreateUserBodyRequest defines all body attributes needed to add User.
@@ -105,6 +108,7 @@ func (handler *UserHandler) CreateUser(echoCtx echo.Context) error {
 		uuid.Nil,
 		form.Username,
 		form.Password,
+		form.Admin,
 	)
 
 	if err := handler.service.Create(echoCtx.Request().Context(), UserEntity); err != nil {
@@ -114,4 +118,45 @@ func (handler *UserHandler) CreateUser(echoCtx echo.Context) error {
 
 	var res = entity.NewResponse(nethttp.StatusCreated, "Request processed successfully.", UserEntity)
 	return echoCtx.JSON(res.Status, res)
+}
+
+func GetUserdata() []CreateUserBodyRequest {
+	db := config.CreateConnection()
+
+	// kita tutup koneksinya di akhir proses
+	defer db.Close()
+
+	var Users []CreateUserBodyRequest
+
+	// kita buat select query
+	sqlStatement := `SELECT username, password, admin FROM public."user"`
+
+	// mengeksekusi sql query
+	rows, err := db.Query(sqlStatement)
+
+	if err != nil {
+		log.Fatalf("Query could not be executed. %v", err)
+	}
+
+	// kita tutup eksekusi proses sql qeurynya
+	defer rows.Close()
+
+	// kita iterasi mengambil datanya
+	for rows.Next() {
+		var User CreateUserBodyRequest
+
+		// kita ambil datanya dan unmarshal ke structnya
+		err = rows.Scan(&User.Username, &User.Password, &User.Admin)
+
+		if err != nil {
+			log.Fatalf("No data. %v", err)
+		}
+
+		// masukkan kedalam slice bukus
+		Users = append(Users, User)
+
+	}
+
+	// return empty buku atau jika error
+	return Users
 }

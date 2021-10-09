@@ -1,7 +1,13 @@
 package config
 
 import (
+	"database/sql"
+	"fmt"
 	"log"
+	"os"
+
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 
 	"github.com/joeshaw/envdecode"
 	"github.com/joho/godotenv"
@@ -50,4 +56,47 @@ func NewConfig(env string) (*Config, error) {
 	}
 
 	return &config, nil
+}
+
+func OpenDatabase(config *Config) *gorm.DB {
+	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+		config.Database.Host,
+		config.Database.Port,
+		config.Database.Username,
+		config.Database.Password,
+		config.Database.Name)
+
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	CheckError(err)
+	return db
+}
+
+func CreateConnection() *sql.DB {
+	// load .env file
+	err := godotenv.Load("user.env")
+
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+
+	// Kita buka koneksi ke db
+	db, err := sql.Open("postgres", os.Getenv("POSTGRES_URL"))
+
+	if err != nil {
+		panic(err)
+	}
+
+	// check the connection
+	err = db.Ping()
+
+	if err != nil {
+		panic(err)
+	}
+	return db
+}
+
+func CheckError(err error) {
+	if err != nil {
+		panic(err)
+	}
 }

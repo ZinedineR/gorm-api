@@ -10,7 +10,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
-	"gorm.io/driver/postgres"
+
 	"gorm.io/gorm"
 
 	"api-gorm-setting/configuration/config"
@@ -22,12 +22,12 @@ import (
 func main() {
 	log.Info().Msg("api-gorm-setting starting")
 	cfg, err := config.NewConfig(".env")
-	checkError(err)
+	config.CheckError(err)
 
 	// tool.ErrorClient = setupErrorReporting(context.Background(), cfg)
 
 	var db *gorm.DB
-	db = openDatabase(cfg)
+	db = config.OpenDatabase(cfg)
 
 	defer func() {
 		if sqlDB, err := db.DB(); err != nil {
@@ -43,7 +43,8 @@ func main() {
 	DetailedHandler := buildDetailedHandler(db)
 	ActorHandler := buildActorHandler(db)
 	LoginHandler := &http.Loginhandler{}
-	engine := http.NewGinEngine(TVHandler, StreamedHandler, WatchedHandler, DetailedHandler, ActorHandler, LoginHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
+	UserHandler := buildUserHandler(db)
+	engine := http.NewGinEngine(TVHandler, StreamedHandler, WatchedHandler, DetailedHandler, ActorHandler, LoginHandler, UserHandler, cfg.InternalConfig.Username, cfg.InternalConfig.Password)
 	server := &nethttp.Server{
 		Addr:    fmt.Sprintf(":%s", cfg.Port),
 		Handler: engine,
@@ -86,24 +87,24 @@ func waitForShutdown(server *nethttp.Server) {
 	log.Info().Msg("api-gorm-setting exiting")
 }
 
-func openDatabase(config *config.Config) *gorm.DB {
-	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		config.Database.Host,
-		config.Database.Port,
-		config.Database.Username,
-		config.Database.Password,
-		config.Database.Name)
+// func openDatabase(config *config.Config) *gorm.DB {
+// 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
+// 		config.Database.Host,
+// 		config.Database.Port,
+// 		config.Database.Username,
+// 		config.Database.Password,
+// 		config.Database.Name)
 
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
-	checkError(err)
-	return db
-}
+// 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+// 	checkError(err)
+// 	return db
+// }
 
-func checkError(err error) {
-	if err != nil {
-		panic(err)
-	}
-}
+// func checkError(err error) {
+// 	if err != nil {
+// 		panic(err)
+// 	}
+// }
 func buildTVHandler(db *gorm.DB) *http.TVHandler {
 	repo := repository.NewTVRepository(db)
 	TVService := service.NewTVService(repo)
@@ -132,4 +133,9 @@ func buildWatchedHandler(db *gorm.DB) *http.WatchedHandler {
 	repo := repository.NewWatchedRepository(db)
 	WatchedService := service.NewWatchedService(repo)
 	return http.NewWatchedHandler(WatchedService)
+}
+func buildUserHandler(db *gorm.DB) *http.UserHandler {
+	repo := repository.NewUserRepository(db)
+	UserService := service.NewUserService(repo)
+	return http.NewUserHandler(UserService)
 }
