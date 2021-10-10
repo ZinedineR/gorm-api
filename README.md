@@ -6,7 +6,7 @@ ERD :
 
 ## how-to
 - download this repo
-- prepare the database, just run the query in data.sql
+- prepare the database, just run migration script in steps below
 - Change .env and user.env as your setting
 - run the migration script to create database
 ```
